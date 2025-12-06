@@ -27,6 +27,9 @@ Clone the repository to your home directory and create symbolic links.
 ### 🐧 Linux (Bash)
 
 ### 🪟 Windows (PowerShell Administrator) 
+# Neovim
+# WezTerm
+New-Item -ItemType SymbolicLink -Path "$env:USERPROFILE\.wezterm.lua" -Target "$PWD\wezterm\.wezterm.lua"
 
 ## 📦 Components
 

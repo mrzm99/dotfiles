@@ -12,7 +12,6 @@ My configuration files for Windows and Linux environment.
 
 ```text
 ~/dotfiles
-~/dotfiles
 ├── nvim/              # Neovim config
 ├── wezterm/           # WezTerm config (Windows main)
 ├── tmux/              # tmux config (Linux main)
@@ -30,4 +29,14 @@ Clone the repository to your home directory and create symbolic links.
 ### 🪟 Windows (PowerShell Administrator) 
 
 ## 📦 Components
+
+### Neovim
+・Plugin Manager: lazy.nvim
+・Fuzzy Finder: Telescope
+
+### tmux
+・Prefix: Ctrl + b
+
+### WezTerm
+
 

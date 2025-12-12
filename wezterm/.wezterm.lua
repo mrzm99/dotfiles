@@ -47,6 +47,27 @@ return {
             key = "k",
             mods = "LEADER",
             action = wezterm.action.ActivatePaneDirection "Up"
+        },
+        -- ペインサイズ変更
+        {
+            key = "H",
+            mods = "LEADER",
+            action = wezterm.action.AdjustPaneSize{"Left", 1},
+        },
+        {
+            key = "L",
+            mods = "LEADER",
+            action = wezterm.action.AdjustPaneSize{"Right", 1},
+        },
+        {
+            key = "J",
+            mods = "LEADER",
+            action = wezterm.action.AdjustPaneSize{"Down", 1}
+        },
+        {
+            key = "K",
+            mods = "LEADER",
+            action = wezterm.action.AdjustPaneSize{"Up", 1}
         }
     }
 }

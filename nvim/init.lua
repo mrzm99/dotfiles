@@ -1,5 +1,5 @@
 vim.hl = vim.highlight
-vim.opt.updatetime = 250
+vim.opt.updatetime = 100
 require("nvim_config.core")
 require("nvim_config.lazy")
 

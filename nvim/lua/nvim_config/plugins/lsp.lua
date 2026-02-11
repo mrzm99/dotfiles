@@ -5,6 +5,19 @@ return {
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
         "SmiteshP/nvim-navbuddy",
+        {
+            "nvimdev/lspsaga.nvim",
+            config = function()
+                require("lspsaga").setup({
+                    ui = { border = "rounded" },
+                    symbol_in_winbar = { enable = false },
+                })
+            end,
+            dependencies = {
+                "nvim-treesitter/nvim-treesitter",
+                "nvim-tree/nvim-web-devicons",
+            }
+        }
     },
     event = "BufReadPre",
     config = function()
@@ -40,6 +53,13 @@ return {
                 vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
                 vim.keymap.set('n', 'gl', vim.diagnostic.open_float, opts)
                 vim.keymap.set('n', '<leader>nv', '<cmd>Navbuddy<cr>', opts)
+                vim.keymap.set('n', 'gp', '<cmd>Lspsaga peek_definition<cr>', opts)
+                vim.keymap.set('n', 'gP', '<cmd>Lspsaga peek_type-definition<cr>', opts)
+                vim.keymap.set('n', 'gh', '<cmd>Lspsaga finder<cr>', opts)
+                vim.keymap.set('n', 'K', '<cmd>Lspsaga hover_doc<cr>', opts)
+                vim.keymap.set('n', 'gn', '<cmd>Lspsaga rename<cr>', opts)
+                vim.keymap.set('n', '<leader>ca', '<cmd>Lspsaga code_action<cr>', opts)
+                vim.keymap.set('n', '<leader>o', '<cmd>Lspsaga outline<cr>', optsqdfsss)
             end,
         })
 

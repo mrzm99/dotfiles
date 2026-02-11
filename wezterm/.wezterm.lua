@@ -3,6 +3,7 @@ local wezterm = require("wezterm")
 return {
     default_prog = { "powershell.exe", "-NoLog" },
     font = wezterm.font("DejaVuSansM Nerd Font"),
+    front_end = "WebGpu",
     font_size = 9.0,
     initial_cols = 200,
     initial_rows = 65,

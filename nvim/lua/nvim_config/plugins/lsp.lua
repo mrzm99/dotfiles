@@ -4,12 +4,14 @@ return {
     dependencies = {
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
+        "SmiteshP/nvim-navbuddy",
     },
     event = "BufReadPre",
     config = function()
         local mason = require("mason")
         local mason_lspconfig = require("mason-lspconfig")
         local lspconfig = require("lspconfig")
+        local navbuddy = require("nvim-navbuddy")
 
         mason.setup({
             ui = {
@@ -25,6 +27,10 @@ return {
 --            automatic_installation = true,
 --        })
 
+        local common_on_attach = function(client, bufnr)
+            navbuddy.attach(client, bufnr)
+        end
+
         vim.api.nvim_create_autocmd('LspAttach', {
             group = vim.api.nvim_create_augroup('UserLspConfig', {}),
             callback = function(ev)
@@ -33,6 +39,7 @@ return {
                 vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
                 vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
                 vim.keymap.set('n', 'gl', vim.diagnostic.open_float, opts)
+                vim.keymap.set('n', '<leader>nv', '<cmd>Navbuddy<cr>', opts)
             end,
         })
 

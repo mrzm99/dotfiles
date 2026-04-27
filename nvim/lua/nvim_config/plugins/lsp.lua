@@ -85,9 +85,7 @@ return {
 
         -- 1. clangd のセットアップ
         vim.lsp.config('clangd', {
-            on_attach = function(client, bufnr)
-                client.server_capabilities.documentHighlightProvider = false
-            end,
+            root_markers = { 'Makefile', '.git', 'compile_commands.json' },
         })
         vim.lsp.enable('clangd')
 

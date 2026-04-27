@@ -3,9 +3,6 @@ return {
     branch = 'master',
     lazy = false,
     build = ":TSUpdate",
-    dependencies = {
-        "nvim-treesitter/nvim-treesitter-refactor",
-    },
     config = function()
         local configs = require("nvim-treesitter.configs")
         local palette = {
@@ -28,15 +25,7 @@ return {
             ensure_installed = { "c", "cpp", "python", "rust", "lua", "vim" },
             sync_install = false,
             highlight = { enable = true },
-            indent = { enable = true },
-
-            refactor = {
-                highlight_definitions = {
-                    enable = true,
-                    clear_on_cursor_move = true,
-                },
-                highlight_current_scope = { enable = false },
-            }
+            indent = { enable = true, disable = {"c", "cpp"} },
         })
 
         local is_hl_enabled = false

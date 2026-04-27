@@ -22,8 +22,6 @@ return {
     event = "BufReadPre",
     config = function()
         local mason = require("mason")
-        local mason_lspconfig = require("mason-lspconfig")
-        local lspconfig = require("lspconfig")
         local navbuddy = require("nvim-navbuddy")
 
         mason.setup({
@@ -35,15 +33,8 @@ return {
                 }
             }
         })
---        mason_lspconfig.setup({
---            ensure_installed = { "clangd", "lua_ls" },
---            automatic_installation = true,
---        })
 
-        local common_on_attach = function(client, bufnr)
-            navbuddy.attach(client, bufnr)
-        end
-
+        -- LSPがバッファにアタッチされた時の共通処理
         vim.api.nvim_create_autocmd('LspAttach', {
             group = vim.api.nvim_create_augroup('UserLspConfig', {}),
             callback = function(ev)
@@ -59,20 +50,52 @@ return {
                 vim.keymap.set('n', 'K', '<cmd>Lspsaga hover_doc<cr>', opts)
                 vim.keymap.set('n', 'gn', '<cmd>Lspsaga rename<cr>', opts)
                 vim.keymap.set('n', '<leader>ca', '<cmd>Lspsaga code_action<cr>', opts)
-                vim.keymap.set('n', '<leader>o', '<cmd>Lspsaga outline<cr>', optsqdfsss)
+                vim.keymap.set('n', '<leader>o', '<cmd>Lspsaga outline<cr>', opts) -- ★タイポを修正
+
+                local client = vim.lsp.get_client_by_id(ev.data.client_id) -- ★argsをevに修正
+
+                if client then
+                    -- 使われていなかった共通関数 (common_on_attach) の代わりにここでNavbuddyをアタッチ
+                    navbuddy.attach(client, ev.buf)
+
+                    -- LSPサーバーが「ドキュメントハイライト機能」をサポートしているか確認
+                    if client.server_capabilities.documentHighlightProvider then
+                        local hl_augroup = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
+
+                        vim.api.nvim_clear_autocmds({ buffer = ev.buf, group = hl_augroup }) -- ★argsをevに修正
+                        vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+                            buffer = ev.buf,
+                            group = hl_augroup,
+                            callback = vim.lsp.buf.document_highlight,
+                        })
+
+                        vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+                            buffer = ev.buf,
+                            group = hl_augroup,
+                            callback = vim.lsp.buf.clear_references,
+                        })
+                    end
+                end
             end,
         })
 
-        lspconfig.clangd.setup({
+        -- =====================================================================
+        -- 旧: require('lspconfig') の削除と、新: vim.lsp.config() への移行
+        -- =====================================================================
+
+        -- 1. clangd のセットアップ
+        vim.lsp.config('clangd', {
             on_attach = function(client, bufnr)
                 client.server_capabilities.documentHighlightProvider = false
             end,
         })
+        vim.lsp.enable('clangd')
 
-        lspconfig.csharp_ls.setup({
+        -- 2. csharp_ls のセットアップ
+        vim.lsp.config('csharp_ls', {
             cmd = { vim.fn.expand("~/.dotnet/tools/csharp-ls") },
-            filetype = { "cs" },
-            root_dir = lspconfig.util.root_pattern("*.sln", "*.csproj", ".git"),
+            filetypes = { "cs" }, 
+            root_markers = { ".sln", ".csproj", ".git" }, -- Neovim 0.11のネイティブなルート指定方法
             settings = {
                 csharp = {
                     formatting = {
@@ -81,5 +104,6 @@ return {
                 },
             },
         })
+        vim.lsp.enable('csharp_ls')
     end
 }
